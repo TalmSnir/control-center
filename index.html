@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <title>Control-Center</title>
+  </head>
+  <body>
+    <main class="control-center-container">
+      <div class="grid">
+        <section class="networks control-section">
+          <div class="inner-container">
+            <button class="wifi-btn btn">
+            <i class="fas fa-wifi"></i>
+            </button>
+              <div class="info">
+              <h1>Wi-Fi</h1>
+              <span class='wifi-connection'>connected<span>
+              </div>
+          </div>
+          <div class="inner-container">
+            <button class="bluetooth-btn btn">
+            <i class="fab fa-bluetooth-b"></i>
+            </button>
+              <div class="info">
+              <h1>Bluetooth</h1>
+              <span class='bluetooth-connection'>connected<span>
+              </div>
+          </div>
+          <div class="inner-container">
+            <button class="airdrop-btn btn">
+            <i class="fas fa-server"></i>
+            </button>
+            <div class="info">
+              <h1>Airdrop</h1>
+              <span class='airdrop-connection'>connected<span>
+              </div>
+          </div>
+        </section>
+
+        <section class="do-not-disturb control-section">
+          <div class="inner-container">
+            <button class="btn">
+            <i class="fas fa-dizzy"></i>
+            </button>
+              <div class="info">
+              <h1>do not disturb</h1>
+              </div>
+          </div>
+        </section>
+        
+        <section class="brightness control-section">
+          <div class="brightness-inner inner-container">
+              <button class="brightness-btn btn">
+              <i class="fas fa-moon brightness-icon"></i>
+              </button>
+                <div class="small-info info">
+                <h1 class='brightness-mode'>dark mode</h1>
+                </div>
+            </div>
+        </section>
+
+        <section class="screen-mirroring control-section">
+           <div class="mirroring-inner inner-container">
+          <button class="btn">
+            <i class="fas fa-clone"></i>
+          </button>
+            <div class="small-info info">
+              <h1 class='mirroring-mode'>screen mirroring</h1>
+            </div>
+            </div>
+        </section>
+
+        <section class="display control-section">
+          <div class="display-slider inner-container">
+            <i class="fas fa-adjust slider-icon"></i>
+            <div class="display-slider-fill"></div>
+            <button class="display-slider-btn"></button>
+          </div>
+            <div class="slider-info info">
+              <h1>display</h1>
+            </div>
+        </section>
+        <section class="sound control-section">
+          <div class="sound-slider inner-container">
+            <i class="fas fa-volume-up slider-icon"></i>
+            <div class="sound-slider-fill"></div>
+            <button class="sound-slider-btn"></button>
+          </div>
+            <div class="slider-info info">
+              <h1>sound</h1>
+            </div>
+        </section>
+
+        <section class="music-bar control-section">
+          <div class="music-inner inner-container">
+            <img src="recordimage.jpg" alt="" class="record-image">
+            <div class="music-info info">
+              <h1>record name</h1>
+              <span class='song name'>song name</span>
+            </div>
+            <div class="music-controls">
+              <i class="fas fa-pause music-icon"></i>
+              <i class="fas fa-forward music-icon"></i>
+            </div>
+          </div>
+        </section>
+        
+        
+      </div>
+    </main>
+    <script
+      src="https://kit.fontawesome.com/7de0d60bf7.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
+  </body>
+</html>
