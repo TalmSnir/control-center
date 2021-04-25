@@ -45,11 +45,13 @@ function invertFilter() {
     brightnessIcon.classList.add("fa-sun");
     brightnessMode.innerText = "light mode";
     body.style.setProperty("filter", "invert(1) hue-rotate(180deg)");
+    displaySlider.style["pointer-events"] = "none";
   } else {
     brightnessIcon.classList.remove("fa-sun");
     brightnessIcon.classList.add("fa-moon");
     brightnessMode.innerText = "dark mode";
     body.style.removeProperty("filter");
+    displaySlider.style["pointer-events"] = "auto";
   }
 }
 
