@@ -40,31 +40,82 @@ function changeState(currentElement, elementName) {
 }
 function invertFilter() {
   body.classList.toggle("filter");
-  if (body.classList.contains("filter")) {
+  if (brightnessIcon.classList.contains("fa-moon")) {
     brightnessIcon.classList.remove("fa-moon");
     brightnessIcon.classList.add("fa-sun");
     brightnessMode.innerText = "light mode";
+    body.style.setProperty("filter", "invert(1) hue-rotate(180deg)");
   } else {
     brightnessIcon.classList.remove("fa-sun");
     brightnessIcon.classList.add("fa-moon");
     brightnessMode.innerText = "dark mode";
+    body.style.removeProperty("filter");
   }
 }
 
-function adjustDisplay(e) {
-  const xPosition = e.offsetX;
-  displayFill.style.setProperty("width", String(xPosition + "px"));
-  displaySliderBtn.style.setProperty("left", xPosition + "px");
+function adjustBrightness(xPosition, elementWidth) {
   body.style.setProperty(
     "filter",
-    `brightness(${Math.trunc((xPosition / this.clientWidth) * 100)}%)`
+    `brightness(${Math.trunc((xPosition / elementWidth) * 100)}%)`
   );
 }
 
-function adjustSound(e) {
+function adjustDisplayByClick(e) {
+  const xPosition = e.offsetX;
+  displayFill.style.setProperty("width", String(xPosition + "px"));
+  displaySliderBtn.style.setProperty("left", xPosition + "px");
+  adjustBrightness(xPosition, this.clientWidth);
+}
+
+function adjustDisplayByDrag(e) {
+  const rect = this.getBoundingClientRect();
+  const maxRelToDocument = rect.right;
+  const minRelToDocument = rect.left;
+  const sliderWidth = maxRelToDocument - minRelToDocument;
+
+  document.onmousemove = (e) => {
+    let newPosition = e.offsetX;
+    newPosition =
+      sliderWidth < newPosition
+        ? sliderWidth
+        : 0 > newPosition
+        ? 0
+        : newPosition;
+    displayFill.style.width = newPosition + "px";
+    displaySliderBtn.style.left = newPosition + "px";
+    adjustBrightness(newPosition, sliderWidth);
+  };
+  document.onmouseup = () => {
+    document.onmousemove = null;
+  };
+}
+
+function adjustSoundByClick(e) {
   const xPosition = e.offsetX;
   soundFill.style.setProperty("width", String(xPosition + "px"));
   soundSliderBtn.style.setProperty("left", xPosition + "px");
+}
+
+function adjustSoundByDrag(e) {
+  const rect = this.getBoundingClientRect();
+  const maxRelToDocument = rect.right;
+  const minRelToDocument = rect.left;
+  const sliderWidth = maxRelToDocument - minRelToDocument;
+
+  document.onmousemove = (e) => {
+    let newPosition = e.offsetX;
+    newPosition =
+      sliderWidth < newPosition
+        ? sliderWidth
+        : 0 > newPosition
+        ? 0
+        : newPosition;
+    soundFill.style.width = newPosition + "px";
+    soundSliderBtn.style.left = newPosition + "px";
+  };
+  document.onmouseup = () => {
+    document.onmousemove = null;
+  };
 }
 
 //event listeners
@@ -81,6 +132,8 @@ airdropBtn.addEventListener("click", () => {
 
 brightnessBtn.addEventListener("click", invertFilter);
 
-displaySlider.addEventListener("click", adjustDisplay);
+displaySlider.addEventListener("click", adjustDisplayByClick);
+displaySlider.addEventListener("mousedown", adjustDisplayByDrag);
 
-soundSlider.addEventListener("click", adjustSound);
+soundSlider.addEventListener("click", adjustSoundByClick);
+soundSlider.addEventListener("mousedown", adjustSoundByDrag);

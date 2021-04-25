@@ -10,15 +10,13 @@ body {
   justify-content: center;
   align-items: center;
 }
-.filter {
-  filter: invert(1) hue-rotate(180deg);
-}
+
 .control-center-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 90%;
-  height: 90%;
+  width: 50%;
+  height: 70%;
   background: rgba(230, 230, 230, 1);
   opacity: 0.6;
   border-radius: 8%;
@@ -143,8 +141,8 @@ h1 {
   background: white;
   border: 1px solid black;
   border-radius: 50%;
-  cursor: pointer;
   z-index: 1;
+  pointer-events: none;
 }
 .display-slider-fill {
   position: absolute;
@@ -165,8 +163,8 @@ h1 {
   background: white;
   border: 1px solid black;
   border-radius: 50%;
-  cursor: pointer;
   z-index: 1;
+  pointer-events: none;
 }
 .sound-slider-fill {
   position: absolute;
