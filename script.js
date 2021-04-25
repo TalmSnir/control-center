@@ -1,5 +1,16 @@
 //body element
 const body = document.querySelector("body");
+
+const recordAudio = document.querySelector(".music-audio");
+const recordImage = document.querySelector(".record-image");
+const recordName = document.querySelector(".record-name");
+const songName = document.querySelector(".song-name");
+const playBtn = document.querySelector(".play-pause");
+const backwardBtn = document.querySelector(".fa-backward");
+const forwardBtn = document.querySelector(".fa-forward");
+let songs = [];
+let songsInx = 0;
+
 //text nodes
 
 const wifiConnectionMode = document.querySelector(".wifi-connection");
@@ -120,6 +131,42 @@ function adjustSoundByDrag(e) {
   };
 }
 
+async function loadSongs() {
+  songs = await fetch("records.json")
+    .then((response) => response.json())
+    .then((data) => data);
+  recordImage.setAttribute("src", songs[0]["record-image"]);
+  recordName.innerText = songs[0]["record-name"];
+  songName.innerText = songs[0]["song-name"];
+  recordAudio.setAttribute("src", songs[0]["audio"]);
+}
+function loadSong() {
+  recordImage.setAttribute("src", songs[songsInx]["record-image"]);
+  recordName.innerText = songs[songsInx]["record-name"];
+  songName.innerText = songs[songsInx]["song-name"];
+  recordAudio.setAttribute("src", songs[songsInx]["audio"]);
+  playPauseAudio();
+}
+function playPauseAudio() {
+  if (playBtn.classList.contains("fa-play")) {
+    playBtn.classList.remove("fa-play");
+    playBtn.classList.add("fa-pause");
+    recordAudio.play();
+  } else {
+    playBtn.classList.remove("fa-pause");
+    playBtn.classList.add("fa-play");
+    recordAudio.pause();
+  }
+}
+
+function nextSong() {
+  songsInx = songsInx + 1 > songs.length - 1 ? 0 : songsInx + 1;
+  loadSong();
+}
+function previousSong() {
+  songsInx = songsInx - 1 < 0 ? songs.length - 1 : songsInx - 1;
+  loadSong();
+}
 //event listeners
 wifiBtn.addEventListener("click", () => {
   changeState(wifiBtn, "wifiBtn");
@@ -139,3 +186,8 @@ displaySlider.addEventListener("mousedown", adjustDisplayByDrag);
 
 soundSlider.addEventListener("click", adjustSoundByClick);
 soundSlider.addEventListener("mousedown", adjustSoundByDrag);
+
+window.addEventListener("load", loadSongs);
+playBtn.addEventListener("click", playPauseAudio);
+forwardBtn.addEventListener("click", nextSong);
+backwardBtn.addEventListener("click", previousSong);

@@ -1,0 +1,20 @@
+[
+  {
+    "record-name": "in your honor",
+    "song-name": "best of you",
+    "audio": "Foo Fighters - Best Of You (Official Music Video).mp3",
+    "record-image": "bestofyouimage.jpg"
+  },
+  {
+    "record-name": "Echoes, Silence, Patience & Grace",
+    "song-name": "the pretender",
+    "audio": "Foo Fighters - The Pretender.mp3",
+    "record-image": "thepretenderimage.jpg"
+  },
+  {
+    "record-name": "The Colour and the Shape",
+    "song-name": "everlong",
+    "audio": "Foo Fighters - Everlong (Official HD Video).mp3",
+    "record-image": "everlongimage.jpg"
+  }
+]
