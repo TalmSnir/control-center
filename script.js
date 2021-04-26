@@ -1,6 +1,33 @@
+//Elements
+
 //body element
 const body = document.querySelector("body");
 
+//network section
+const wifiBtn = document.querySelector(".wifi-btn");
+const wifiConnectionMode = document.querySelector(".wifi-connection");
+const bluetoothConnectionMode = document.querySelector(".bluetooth-connection");
+const bluetoothBtn = document.querySelector(".bluetooth-btn");
+const airdropBtn = document.querySelector(".airdrop-btn");
+const airdropConnectionMode = document.querySelector(".airdrop-connection");
+
+//darkmode section
+const brightnessBtn = document.querySelector(".brightness-btn");
+const brightnessIcon = document.querySelector(".brightness-icon");
+const brightnessMode = document.querySelector(".brightness-mode");
+
+//display bar section
+const displayFill = document.querySelector(".display-slider-fill");
+const displaySliderBtn = document.querySelector(".display-slider-btn");
+const displaySlider = document.querySelector(".display-slider");
+
+//sound bar section
+const soundFill = document.querySelector(".sound-slider-fill");
+const soundSliderBtn = document.querySelector(".sound-slider-btn");
+const soundSlider = document.querySelector(".sound-slider");
+const volumeIcon = document.querySelector(".volume");
+
+//music section
 const recordAudio = document.querySelector(".music-audio");
 const recordImage = document.querySelector(".record-image");
 const recordName = document.querySelector(".record-name");
@@ -11,33 +38,7 @@ const forwardBtn = document.querySelector(".fa-forward");
 let songs = [];
 let songsInx = 0;
 
-//text nodes
-
-const wifiConnectionMode = document.querySelector(".wifi-connection");
-
-const bluetoothConnectionMode = document.querySelector(".bluetooth-connection");
-const airdropConnectionMode = document.querySelector(".airdrop-connection");
-const brightnessMode = document.querySelector(".brightness-mode");
-// const brightnessMode = document.querySelector(".brightness-mode");
-// const brightnessMode = document.querySelector(".brightness-mode");
-// const brightnessMode = document.querySelector(".brightness-mode");
-
-//buttons
-const wifiBtn = document.querySelector(".wifi-btn");
-const bluetoothBtn = document.querySelector(".bluetooth-btn");
-const airdropBtn = document.querySelector(".airdrop-btn");
-const brightnessBtn = document.querySelector(".brightness-btn");
-const brightnessIcon = document.querySelector(".brightness-icon");
-
-const displayFill = document.querySelector(".display-slider-fill");
-const displaySliderBtn = document.querySelector(".display-slider-btn");
-const displaySlider = document.querySelector(".display-slider");
-
-const soundFill = document.querySelector(".sound-slider-fill");
-const soundSliderBtn = document.querySelector(".sound-slider-btn");
-const soundSlider = document.querySelector(".sound-slider");
-
-//functions
+//functions: networks
 function changeModeText() {}
 function changeState(currentElement, elementName) {
   currentElement.classList.toggle("active");
@@ -49,6 +50,7 @@ function changeState(currentElement, elementName) {
     ? "disconnected"
     : "connected";
 }
+//functions: darkmode
 function invertFilter() {
   body.classList.toggle("filter");
   if (brightnessIcon.classList.contains("fa-moon")) {
@@ -65,7 +67,7 @@ function invertFilter() {
     displaySlider.style["pointer-events"] = "auto";
   }
 }
-
+//functions: display bar
 function adjustBrightness(xPosition, elementWidth) {
   body.style.setProperty(
     "filter",
@@ -80,7 +82,7 @@ function adjustDisplayByClick(e) {
   adjustBrightness(xPosition, this.clientWidth);
 }
 
-function adjustDisplayByDrag(e) {
+function adjustDisplayByDrag() {
   const rect = this.getBoundingClientRect();
   const maxRelToDocument = rect.right;
   const minRelToDocument = rect.left;
@@ -103,13 +105,18 @@ function adjustDisplayByDrag(e) {
   };
 }
 
+//functions: sound bar
 function adjustSoundByClick(e) {
   const xPosition = e.offsetX;
+  let relativePos = 1;
   soundFill.style.setProperty("width", String(xPosition + "px"));
   soundSliderBtn.style.setProperty("left", xPosition + "px");
+  relativePos = xPosition / this.clientWidth;
+  recordAudio.volume = relativePos > 1 ? 1 : relativePos;
+  volumeIconAdjust(relativePos);
 }
 
-function adjustSoundByDrag(e) {
+function adjustSoundByDrag() {
   const rect = this.getBoundingClientRect();
   const maxRelToDocument = rect.right;
   const minRelToDocument = rect.left;
@@ -117,46 +124,77 @@ function adjustSoundByDrag(e) {
 
   document.onmousemove = (e) => {
     let newPosition = e.offsetX;
+    let relativePos = 1;
     newPosition =
       sliderWidth < newPosition
         ? sliderWidth
         : 0 > newPosition
         ? 0
         : newPosition;
+    relativePos = newPosition / this.clientWidth;
     soundFill.style.width = newPosition + "px";
     soundSliderBtn.style.left = newPosition + "px";
+    recordAudio.volume = relativePos > 1 ? 1 : relativePos;
+    volumeIconAdjust(relativePos);
   };
   document.onmouseup = () => {
     document.onmousemove = null;
   };
 }
 
+function volumeIconAdjust(relativePos) {
+  if (relativePos > 0.8 && !volumeIcon.classList.contains("fa-volume-up")) {
+    volumeIcon.classList.add("fa-volume-up");
+    volumeIcon.classList.remove("fa-volume-down");
+    volumeIcon.classList.remove("fa-volume-mute");
+    volumeIcon.classList.remove("fa-volume-off");
+  }
+  if (relativePos > 0.5 && relativePos < 0.8) {
+    volumeIcon.classList.add("fa-volume-down");
+    volumeIcon.classList.remove("fa-volume-up");
+    volumeIcon.classList.remove("fa-volume-mute");
+    volumeIcon.classList.remove("fa-volume-off");
+  }
+  if (relativePos > 0.05 && relativePos < 0.4) {
+    volumeIcon.classList.add("fa-volume-off");
+    volumeIcon.classList.remove("fa-volume-up");
+    volumeIcon.classList.remove("fa-volume-down");
+    volumeIcon.classList.remove("fa-volume-mute");
+  }
+  if (relativePos < 0.05) {
+    volumeIcon.classList.add("fa-volume-mute");
+    volumeIcon.classList.remove("fa-volume-up");
+    volumeIcon.classList.remove("fa-volume-down");
+    volumeIcon.classList.remove("fa-volume-off");
+    recordAudio.volume = 0;
+  }
+}
+//functions: music section
 async function loadSongs() {
   songs = await fetch("records.json")
     .then((response) => response.json())
     .then((data) => data);
-  recordImage.setAttribute("src", songs[0]["record-image"]);
-  recordName.innerText = songs[0]["record-name"];
-  songName.innerText = songs[0]["song-name"];
-  recordAudio.setAttribute("src", songs[0]["audio"]);
+  loadSong();
 }
 function loadSong() {
   recordImage.setAttribute("src", songs[songsInx]["record-image"]);
   recordName.innerText = songs[songsInx]["record-name"];
   songName.innerText = songs[songsInx]["song-name"];
   recordAudio.setAttribute("src", songs[songsInx]["audio"]);
-  playPauseAudio();
+  playBtn.classList.contains("fa-play") ? pauseAudio() : playAudio();
 }
 function playPauseAudio() {
-  if (playBtn.classList.contains("fa-play")) {
-    playBtn.classList.remove("fa-play");
-    playBtn.classList.add("fa-pause");
-    recordAudio.play();
-  } else {
-    playBtn.classList.remove("fa-pause");
-    playBtn.classList.add("fa-play");
-    recordAudio.pause();
-  }
+  playBtn.classList.contains("fa-play") ? playAudio() : pauseAudio();
+}
+function pauseAudio() {
+  playBtn.classList.remove("fa-pause");
+  playBtn.classList.add("fa-play");
+  recordAudio.pause();
+}
+function playAudio() {
+  playBtn.classList.remove("fa-play");
+  playBtn.classList.add("fa-pause");
+  recordAudio.play();
 }
 
 function nextSong() {
@@ -167,7 +205,8 @@ function previousSong() {
   songsInx = songsInx - 1 < 0 ? songs.length - 1 : songsInx - 1;
   loadSong();
 }
-//event listeners
+
+//Event Listeners
 wifiBtn.addEventListener("click", () => {
   changeState(wifiBtn, "wifiBtn");
 });
@@ -191,3 +230,7 @@ window.addEventListener("load", loadSongs);
 playBtn.addEventListener("click", playPauseAudio);
 forwardBtn.addEventListener("click", nextSong);
 backwardBtn.addEventListener("click", previousSong);
+recordAudio.addEventListener("ended", nextSong);
+volumeIcon.addEventListener("click", () => {
+  volumeIconAdjust(0);
+});
